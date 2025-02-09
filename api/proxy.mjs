@@ -13,8 +13,10 @@ export default async function handler(req, res) {
     return res.status(200).end()
   }
 
-  const url =
-    'https://vancouver.opendatasoft.com/api/explore/v2.1/catalog/datasets'
+  const { dataset_id } = req.query
+
+  const url = `https://vancouver.opendatasoft.com/api/explore/v2.1/catalog/datasets/${dataset_id}/records`
+  console.log(url)
 
   try {
     const response = await fetch(url)
