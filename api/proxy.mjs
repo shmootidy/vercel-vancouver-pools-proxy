@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   try {
     const data = await fetchPoolSchedules()
 
-    return res.status(200).json(data)
+    return res.status(200).json(data.body.center_events)
   } catch (error) {
     throw new Error(`Failed to fetch pool schedules: ${error}`)
   }
