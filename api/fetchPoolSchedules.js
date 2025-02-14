@@ -1,6 +1,5 @@
 import { fetch } from 'undici'
-
-export default async function handler(req, res) {
+export default async function fetchPoolSchedules() {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
   res.setHeader(
@@ -57,7 +56,7 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json()
-    return res.status(200).json(data)
+    return data
   } catch (error) {
     throw new Error(`Failed to fetch pool schedules: ${error}`)
   }
