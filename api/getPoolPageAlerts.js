@@ -9,7 +9,7 @@ export default async function getPoolPageAlerts(poolUrl) {
   const siteAlerts = $('[id^="siteAlert"]')
   const siteAlertContents = []
   siteAlerts.each((idx, elm) => {
-    const contents = $(elm).text()
+    const contents = $(elm).text().trim()
     siteAlertContents.push(contents)
   })
 
