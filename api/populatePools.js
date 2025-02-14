@@ -3,8 +3,6 @@ import fetchPoolIdByName from './fetchPoolIdByName.js'
 import updatePoolClosures from './updatePoolClosures.js'
 import getPoolPageAlerts from './getPoolPageAlerts.js'
 
-// i'll create the urls by using the name from the calendar, then scrape for alerts. but that's later
-// they all share a common url: https://vancouver.ca/parks-recreation-culture/name-of-pool.aspx
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' })
