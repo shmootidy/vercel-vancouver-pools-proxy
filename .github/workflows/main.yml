@@ -4,6 +4,7 @@ on:
   schedule:
     # Runs at midnight UTC on the first of every month
     - cron: '0 0 1 * *'
+  workflow_dispatch:
 
 jobs:
   trigger-api:
