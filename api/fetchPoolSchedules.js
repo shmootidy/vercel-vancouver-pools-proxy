@@ -1,13 +1,5 @@
 import { fetch } from 'undici'
 export default async function fetchPoolSchedules() {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Accept, Authorization'
-  )
-  res.setHeader('Content-Type', 'application/json')
-
   const poolCalendarID = 55
   const poolCentreIDs = [
     37, // britannia
@@ -55,8 +47,7 @@ export default async function fetchPoolSchedules() {
       )
     }
 
-    const data = await response.json()
-    return data
+    return await response.json()
   } catch (error) {
     throw new Error(`Failed to fetch pool schedules: ${error}`)
   }
