@@ -37,7 +37,13 @@ export default async function getPoolsByID(req, res) {
     }
 
     if (data && data.length) {
-      return res.status(200).json(data)
+      const formattedData = data.map((d) => {
+        return {
+          ...d,
+          amenities: JSON.parse(d.amenities),
+        }
+      })
+      return res.status(200).json(formattedData)
     } else {
       throw new Error(`No pools found.`)
     }
