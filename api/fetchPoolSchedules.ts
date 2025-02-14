@@ -1,4 +1,5 @@
 import { fetch } from 'undici'
+
 export default async function fetchPoolSchedules() {
   const poolCalendarID = 55
   const poolCentreIDs = [
