@@ -4,7 +4,6 @@ export default async function fetchPoolIdByName(poolName) {
   try {
     const { data, error } = await supabase
       .from('pools')
-      .select()
       .select('id')
       .eq('name', poolName)
 
