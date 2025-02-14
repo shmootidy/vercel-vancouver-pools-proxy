@@ -1,7 +1,7 @@
 import getPoolPageAmenities from './getPoolPageAmenities.js'
 import supabase from './supabaseClient.js'
-import updatePoolAmenities from './updatePoolAmenities.js'
 
+// this function is only called in curl
 export default async function populatePoolAmenities(req, res) {
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -26,6 +26,7 @@ export default async function populatePoolAmenities(req, res) {
     // fetch all pools from database
     const { data: pools } = await supabase.from('pools').select()
 
+    // find the amenities
     const poolPageAmenities = await Promise.all(
       pools.map(async (pool) => {
         return {
@@ -34,7 +35,22 @@ export default async function populatePoolAmenities(req, res) {
         }
       })
     )
-    await updatePoolAmenities(poolPageAmenities)
+
+    // populate DB
+    const results = await Promise.all(
+      poolPageAmenities.map(async ({ id, amenities }) => {
+        const { data, error } = await supabase
+          .from('pools')
+          .update({ amenities })
+          .eq('id', id)
+          .select()
+        return { id, data, error }
+      })
+    )
+    const errors = results.filter(({ error }) => error)
+    if (errors.length) {
+      throw new Error(`Some updates failed: ${errors}`)
+    }
 
     return res.status(200).json()
   } catch (error) {
