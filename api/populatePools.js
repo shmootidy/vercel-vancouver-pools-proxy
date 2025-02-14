@@ -35,7 +35,7 @@ export default async function handler(req, res) {
 
     const { data, error } = await supabase
       .from('closures')
-      .upsert(poolUpdates, {
+      .upsert(poolSchedulesWithClosures, {
         onConflict: ['pool_id'],
       })
 
