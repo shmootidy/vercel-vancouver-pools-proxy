@@ -1,5 +1,4 @@
 import fetchPoolSchedules from './fetchPoolSchedules.js'
-import updatePoolClosures from './updatePoolClosures.js'
 import getPoolPageAlerts from './getPoolPageAlerts.js'
 import getPoolByName from './getPoolByName.js'
 
@@ -34,10 +33,20 @@ export default async function handler(req, res) {
         })
     )
 
-    await updatePoolClosures(poolSchedulesWithClosures)
+    const { data, error } = await supabase
+      .from('closures')
+      .upsert(poolUpdates, {
+        onConflict: ['pool_id'],
+      })
 
+    if (error) {
+      throw new Error(`Error inserting data into supabase: ${error.message}`)
+    }
+
+    console.log(`Pools data successfully inserted/updated: ${data}`)
     return res.status(200).json()
   } catch (error) {
+    console.error('Failed to update database:', error.message)
     return res.status(500).json({ success: false, error: error.message })
   }
 }
