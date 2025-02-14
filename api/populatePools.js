@@ -1,6 +1,7 @@
 import fetchPoolSchedules from './fetchPoolSchedules.js'
 import fetchPoolIdByName from './fetchPoolIdByName.js'
 import updatePoolClosures from './updatePoolClosures.js'
+import getPoolPageAlerts from './getPoolPageAlerts.js'
 
 // i'll create the urls by using the name from the calendar, then scrape for alerts. but that's later
 // they all share a common url: https://vancouver.ca/parks-recreation-culture/name-of-pool.aspx
@@ -23,9 +24,12 @@ export default async function handler(req, res) {
             .find((e) => e.title.includes('Pool Closure'))
           const poolName = stripPoolNameOfAsterisk(pool.center_name)
           const poolID = await fetchPoolIdByName(poolName)
-
+          const poolPageAlerts = await getPoolPageAlerts(
+            generatePoolUrl(poolName)
+          )
           return {
             pool_id: poolID,
+            reason_for_closure: poolPageAlerts,
             event_id: closureEvent?.event_item_id,
             closure_end_date: closureEvent?.end_time,
           }
@@ -45,4 +49,9 @@ function stripPoolNameOfAsterisk(poolName) {
     return poolName.slice(1, poolName.length)
   }
   return poolName
+}
+
+function generatePoolUrl(poolName) {
+  const poolSplitName = poolName.toLowerCase().split(' ').join('-')
+  return `https://vancouver.ca/parks-recreation-culture/${poolSplitName}.aspx`
 }
