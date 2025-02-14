@@ -1,0 +1,14 @@
+name: Monthly Cron Job
+
+on:
+  schedule:
+    # Runs at midnight UTC on the first of every month
+    - cron: '0 0 1 * *'
+
+jobs:
+  trigger-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: update pool closures
+        run: |
+          curl -X POST vercel-vancouver-pools-proxy.vercel.app/api/populatePools
