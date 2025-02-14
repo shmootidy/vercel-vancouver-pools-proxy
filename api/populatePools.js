@@ -7,7 +7,7 @@ const supabase = createClient(
   process.env.SUPABASE_SECRET_KEY
 )
 
-// i'll create the urls by using the name from the calendar, then scrape for alerst. but that's later
+// i'll create the urls by using the name from the calendar, then scrape for alerts. but that's later
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' })
@@ -21,20 +21,27 @@ export default async function handler(req, res) {
   }
 }
 
-// return pool name and date of reopening
 function findPoolClosures(poolSchedules) {
-  // k, hang on.
-  // i want to find the last pool closure
-  // the end date of the last closure should (hopefully) be when it reopens
-  // i can confirm this with a comparison against the title (at least for Killarney, which is currently closed)
-  const poolsWithClosures = {}
-  poolSchedules.data.center_events.forEach((pool) => {
-    const lastPoolClosure = pool.events.findLast((e) => {
-      return e.title.include('Pool Closure')
+  return poolCalendars
+    .filter((pool) => {
+      return pool.events.find((e) => e.title.includes('Pool Closure'))
     })
-    if (lastPoolClosure) {
-      const poolClosureEndDate = e.end_time
-      poolsWithClosures[pool.center_name] = poolClosureEndDate
-    }
-  })
+    .map((pool) => {
+      const closureEvent = pool.events
+        .reverse()
+        .find((e) => e.title.includes('Pool Closure'))
+      return {
+        poolName: stripPoolNameOfAsterisk(pool.center_name),
+        closureEventID: closureEvent?.event_item_id,
+        closureEventEndTime: closureEvent?.end_time,
+        eventTitle: closureEvent?.title,
+      }
+    })
+}
+
+function stripPoolNameOfAsterisk(poolName) {
+  if (poolName[0] === '*') {
+    return poolName.slice(1, poolName.length)
+  }
+  return poolName
 }
