@@ -1,7 +1,7 @@
 import fetchPoolSchedules from './fetchPoolSchedules.js'
-import fetchPoolIdByName from './fetchPoolIdByName.js'
 import updatePoolClosures from './updatePoolClosures.js'
 import getPoolPageAlerts from './getPoolPageAlerts.js'
+import getPoolByName from './getPoolByName.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -20,11 +20,11 @@ export default async function handler(req, res) {
           const closureEvent = pool.events
             .reverse()
             .find((e) => e.title.includes('Pool Closure'))
+
           const poolName = stripPoolNameOfAsterisk(pool.center_name)
-          const poolID = await fetchPoolIdByName(poolName)
-          const poolPageAlerts = await getPoolPageAlerts(
-            generatePoolUrl(poolName)
-          )
+          const { id: poolID, url: poolUrl } = await getPoolByName(poolName)
+          const poolPageAlerts = await getPoolPageAlerts(poolUrl)
+
           return {
             pool_id: poolID,
             reason_for_closure: poolPageAlerts,
@@ -47,9 +47,4 @@ function stripPoolNameOfAsterisk(poolName) {
     return poolName.slice(1, poolName.length)
   }
   return poolName
-}
-
-function generatePoolUrl(poolName) {
-  const poolSplitName = poolName.toLowerCase().split(' ').join('-')
-  return `https://vancouver.ca/parks-recreation-culture/${poolSplitName}.aspx`
 }
