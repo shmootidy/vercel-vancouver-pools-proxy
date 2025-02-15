@@ -24,10 +24,7 @@ export default async function getPoolSchedules(req, res) {
   try {
     const data = await fetchPoolSchedules()
 
-    const centerEvents = data.body.center_events.map((e) => {
-      return stripPipeFromEventTitles(e)
-    })
-    return res.status(200).json(centerEvents)
+    return res.status(200).json(data.body.center_events)
   } catch (error) {
     throw new Error(`Failed to fetch pool schedules: ${error}`)
   }
