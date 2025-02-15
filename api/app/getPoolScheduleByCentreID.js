@@ -1,5 +1,4 @@
 import { fetch } from 'undici'
-import { stripPipeFromEventTitles } from '../../helpers/poolScheduleUtils.js'
 
 export default async function getPoolScheduleByCentreID(req, res) {
   if (req.method === 'OPTIONS') {

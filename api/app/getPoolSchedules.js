@@ -1,5 +1,4 @@
 import fetchPoolSchedules from '../../helpers/fetchPoolSchedules.js'
-import { stripPipeFromEventTitles } from '../../helpers/poolScheduleUtils.js'
 
 export default async function getPoolSchedules(req, res) {
   if (req.method === 'OPTIONS') {
