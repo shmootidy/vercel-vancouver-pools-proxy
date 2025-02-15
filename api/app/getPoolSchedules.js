@@ -1,4 +1,5 @@
 import fetchPoolSchedules from '../../helpers/fetchPoolSchedules.js'
+import { stripPipeFromEventTitles } from '../../helpers/poolScheduleUtils.js'
 
 export default async function getPoolSchedules(req, res) {
   if (req.method === 'OPTIONS') {
@@ -23,7 +24,10 @@ export default async function getPoolSchedules(req, res) {
   try {
     const data = await fetchPoolSchedules()
 
-    return res.status(200).json(data.body.center_events)
+    const centerEvents = data.body.center_events.map((e) => {
+      return stripPipeFromEventTitles(e)
+    })
+    return res.status(200).json(centerEvents)
   } catch (error) {
     throw new Error(`Failed to fetch pool schedules: ${error}`)
   }

@@ -1,4 +1,5 @@
 import { fetch } from 'undici'
+import { stripPipeFromEventTitles } from '../../helpers/poolScheduleUtils.js'
 
 export default async function getPoolScheduleByCentreID(req, res) {
   if (req.method === 'OPTIONS') {
@@ -65,7 +66,9 @@ export default async function getPoolScheduleByCentreID(req, res) {
 
     const data = await response.json()
 
-    return res.status(200).json(data.body.center_events[0])
+    const centerEvent = stripPipeFromEventTitles(data.body.center_events[0])
+
+    return res.status(200).json(centerEvent)
   } catch (error) {
     console.error(error)
     res.status(error.status).json({ success: false, error: error.message })
