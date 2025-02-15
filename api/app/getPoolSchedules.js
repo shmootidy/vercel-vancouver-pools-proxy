@@ -1,4 +1,4 @@
-import fetchPoolSchedules from './fetchPoolSchedules.js'
+import fetchPoolSchedules from '../../helpers/fetchPoolSchedules.js'
 
 export default async function getPoolSchedules(req, res) {
   if (req.method === 'OPTIONS') {

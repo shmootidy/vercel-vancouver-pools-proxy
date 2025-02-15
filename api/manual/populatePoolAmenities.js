@@ -1,4 +1,4 @@
-import getPoolPageAmenities from './getPoolPageAmenities.js'
+import getPoolPageAmenities from '../../helpers/getPoolPageAmenities.js'
 import supabase from './supabaseClient.js'
 
 // this function is only called in curl

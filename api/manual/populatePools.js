@@ -1,6 +1,6 @@
-import fetchPoolSchedules from './fetchPoolSchedules.js'
+import fetchPoolSchedules from '../../helpers/fetchPoolSchedules.js'
 import getPoolPageAlerts from '../../helpers/getPoolPageAlerts.js'
-import getPoolByName from './getPoolByName.js'
+import getPoolByName from '../../helpers/getPoolByName.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
