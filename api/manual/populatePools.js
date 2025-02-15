@@ -1,8 +1,7 @@
 import fetchPoolSchedules from './fetchPoolSchedules.js'
-import getPoolPageAlerts from './getPoolPageAlerts.js'
+import getPoolPageAlerts from '../../helpers/getPoolPageAlerts.js'
 import getPoolByName from './getPoolByName.js'
 
-// called manually
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' })

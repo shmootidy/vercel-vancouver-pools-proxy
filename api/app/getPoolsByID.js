@@ -1,4 +1,4 @@
-import supabase from './supabaseClient.js'
+import supabase from '../../helpers/supabaseClient.js'
 
 export default async function getPoolsByID(req, res) {
   if (req.method === 'OPTIONS') {
