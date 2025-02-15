@@ -13,6 +13,7 @@ export default async function fetchPoolSchedules() {
     45, // templeton
     2, // vaq
   ]
+
   const payload = {
     activity_category_ids: [],
     activity_ids: [],
