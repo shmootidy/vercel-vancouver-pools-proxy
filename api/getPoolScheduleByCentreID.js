@@ -65,7 +65,7 @@ export default async function getPoolScheduleByCentreID(req, res) {
 
     const data = await response.json()
 
-    return res.status(200).json(data.body.center_events)
+    return res.status(200).json(data.body.center_events[0])
   } catch (error) {
     console.error(error)
     res.status(error.status).json({ success: false, error: error.message })
