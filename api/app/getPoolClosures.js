@@ -1,6 +1,6 @@
-import supabase from './supabaseClient.js'
+import supabase from '../../helpers/supabaseClient.js'
 
-export default async function getPools(req, res) {
+export default async function getPoolClosures(req, res) {
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
@@ -21,25 +21,21 @@ export default async function getPools(req, res) {
   res.setHeader('Content-Type', 'application/json')
 
   try {
-    const { data, error } = await supabase.from('pools').select()
+    const { data, error } = await supabase.from('closures').select()
 
     if (error) {
-      throw new Error(`Error fetching pool data: ${error.message}`)
+      throw new Error(`Error fetching pool closures: ${error.message}`)
     }
 
-    if (data && data.length) {
-      const formattedData = data.map((d) => {
-        return {
-          ...d,
-          amenities: JSON.parse(d.amenities),
-        }
-      })
-      return res.status(200).json(formattedData)
+    if (data && data.length > 0) {
+      return res.status(200).json(data)
     } else {
-      throw new Error(`No pools found.`)
+      throw new Error(`No pool closure data found.`)
     }
   } catch (error) {
-    console.error(error)
-    res.status(error.status).json({ success: false, error: error.message })
+    console.error(error.message)
+    return res
+      .status(error.status)
+      .json({ success: false, error: error.message })
   }
 }

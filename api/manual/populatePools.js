@@ -1,5 +1,5 @@
 import fetchPoolSchedules from './fetchPoolSchedules.js'
-import getPoolPageAlerts from './getPoolPageAlerts.js'
+import getPoolPageAlerts from '../../helpers/getPoolPageAlerts.js'
 import getPoolByName from './getPoolByName.js'
 
 export default async function handler(req, res) {
