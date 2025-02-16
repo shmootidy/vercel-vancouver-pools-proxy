@@ -18,9 +18,12 @@ export default async function handler(req, res) {
           return pool.events.find((e) => e.title.includes('Pool Closure'))
         })
         .map(async (pool) => {
-          const closureEvent = pool.events
-            .reverse()
-            .find((e) => e.title.includes('Pool Closure'))
+          const lastClosureEvent = pool.events.findLast((e) =>
+            e.title.includes('Pool Closure')
+          )
+          const firstClosureEvent = pool.events.find((e) =>
+            e.title.includes('Pool Closure')
+          )
 
           const poolName = stripPoolNameOfAsterisk(pool.center_name)
           const { id: poolID, url: poolUrl } = await getPoolByName(poolName)
@@ -29,8 +32,9 @@ export default async function handler(req, res) {
           return {
             pool_id: poolID,
             reason_for_closure: poolPageAlerts,
-            event_id: closureEvent?.event_item_id,
-            closure_end_date: closureEvent?.end_time,
+            event_id: lastClosureEvent?.event_item_id,
+            closure_start_date: firstClosureEvent?.start_time,
+            closure_end_date: lastClosureEvent?.end_time,
           }
         })
     )
