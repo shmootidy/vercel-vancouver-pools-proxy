@@ -1,3 +1,5 @@
+import supabase from '../../helpers/supabaseClient.js'
+
 import fetchPoolSchedules from '../../helpers/fetchPoolSchedules.js'
 import getPoolPageAlerts from '../../helpers/getPoolPageAlerts.js'
 import getPoolByName from '../../helpers/getPoolByName.js'
@@ -35,15 +37,13 @@ export default async function handler(req, res) {
 
     const { data, error } = await supabase
       .from('closures')
-      .upsert(poolSchedulesWithClosures, {
-        onConflict: ['pool_id'],
-      })
+      .insert(poolSchedulesWithClosures)
 
     if (error) {
       throw new Error(`Error inserting data into supabase: ${error.message}`)
     }
 
-    console.log(`Pools data successfully inserted/updated: ${data}`)
+    console.log(`Pools data successfully inserted: ${data}`)
     return res.status(200).json()
   } catch (error) {
     console.error('Failed to update database:', error.message)

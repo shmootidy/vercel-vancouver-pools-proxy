@@ -1,5 +1,5 @@
 import getPoolPageAmenities from '../../helpers/getPoolPageAmenities.js'
-import supabase from './supabaseClient.js'
+import supabase from '../../helpers/supabaseClient.js'
 
 // this function is only called in curl
 export default async function populatePoolAmenities(req, res) {
