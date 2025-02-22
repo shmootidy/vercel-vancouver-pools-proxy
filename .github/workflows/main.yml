@@ -12,4 +12,4 @@ jobs:
     steps:
       - name: update pool closures
         run: |
-          curl -X POST https://vercel-vancouver-pools-proxy.vercel.app/api/manual/populatePools
+          curl -X POST https://vercel-vancouver-pools-proxy.vercel.app/api/manual/populatePoolClosures
