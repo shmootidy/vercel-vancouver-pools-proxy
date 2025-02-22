@@ -1,6 +1,6 @@
 # Vancouver Pools Proxy
 
-This is a serverless backend that handles the API requests for my frontend app, [Lower Mainland Pools](!https://shmootidy.github.io/lower-mainland-pools).
+This is a serverless backend that handles the API requests for my frontend app, [Lower Mainland Pools](https://shmootidy.github.io/lower-mainland-pools).
 
 It has three purposes:
 
