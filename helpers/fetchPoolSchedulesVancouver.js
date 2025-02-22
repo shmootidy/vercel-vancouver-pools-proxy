@@ -1,6 +1,6 @@
 import { fetch } from 'undici'
 
-export default async function fetchPoolSchedules() {
+export default async function fetchPoolSchedulesVancouver() {
   const poolCalendarID = 55
   const poolCentreIDs = [
     37, // britannia
@@ -45,7 +45,7 @@ export default async function fetchPoolSchedules() {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch data: ${response.status} ${response.statusText}`
+        `Failed to fetch data: ${response.status} ${response.statusText}`,
       )
     }
 

@@ -1,6 +1,6 @@
 import supabase from '../../helpers/supabaseClient.js'
 
-import fetchPoolSchedules from '../../helpers/fetchPoolSchedules.js'
+import fetchPoolSchedulesVancouver from '../../helpers/fetchPoolSchedulesVancouver.js'
 import getPoolPageAlerts from '../../helpers/getPoolPageAlerts.js'
 import getPoolByName from '../../helpers/getPoolByName.js'
 
@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const poolSchedules = await fetchPoolSchedules()
+    const poolSchedules = await fetchPoolSchedulesVancouver()
 
     const poolSchedulesWithClosures = await Promise.all(
       poolSchedules.body.center_events
@@ -19,10 +19,10 @@ export default async function handler(req, res) {
         })
         .map(async (pool) => {
           const lastClosureEvent = pool.events.findLast((e) =>
-            e.title.includes('Pool Closure')
+            e.title.includes('Pool Closure'),
           )
           const firstClosureEvent = pool.events.find((e) =>
-            e.title.includes('Pool Closure')
+            e.title.includes('Pool Closure'),
           )
 
           const poolName = stripPoolNameOfAsterisk(pool.center_name)
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
             closure_start_date: firstClosureEvent?.start_time,
             closure_end_date: lastClosureEvent?.end_time,
           }
-        })
+        }),
     )
 
     const { data, error } = await supabase
