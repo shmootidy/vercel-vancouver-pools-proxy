@@ -16,7 +16,7 @@ Vercel has a nice integration with Github, automatically deploying any changes p
 Setting it up took the following steps:
 
 1. Pushing this repo to Github.
-2. Deploying this repo in Vercel. (Creating a new project in Vercel and pointing it to this repo.)
+2. Deploying this repo in Vercel. (Creating a new project in Vercel and pointing it to the Github repo.)
 3. Pointing the frontend to the Vercel domain URL.
 
 ## Making changes
