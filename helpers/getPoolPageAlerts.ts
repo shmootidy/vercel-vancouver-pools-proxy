@@ -1,7 +1,7 @@
 import { request } from 'undici'
 import * as cheerio from 'cheerio'
 
-export default async function getPoolPageAlerts(poolUrl) {
+export default async function getPoolPageAlerts(poolUrl: string) {
   const { body } = await request(poolUrl)
   const html = await body.text()
   const $ = cheerio.load(html)

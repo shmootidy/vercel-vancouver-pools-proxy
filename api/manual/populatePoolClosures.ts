@@ -1,3 +1,4 @@
+import { Request, Response } from 'express'
 import supabase from '../../helpers/supabaseClient.js'
 
 import fetchPoolSchedules from '../../helpers/fetchPoolSchedules.js'
@@ -5,7 +6,7 @@ import getPoolPageAlerts from '../../helpers/getPoolPageAlerts.js'
 import getPoolByName from '../../helpers/getPoolByName.js'
 import { VancouverPoolSchedules } from '../../types/interfaces.js'
 
-export default async function handler(req, res) {
+export default async function handler(req: Request, res: Response) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
@@ -31,6 +32,10 @@ export default async function handler(req, res) {
           }
 
           const { id, url } = poolObj
+
+          if (!url) {
+            throw new Error(`Pool URL not found: ${poolName}`)
+          }
 
           const poolPageAlerts = await getPoolPageAlerts(url)
 

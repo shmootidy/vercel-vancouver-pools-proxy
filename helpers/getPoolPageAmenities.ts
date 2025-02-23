@@ -1,7 +1,11 @@
 import { request } from 'undici'
 import * as cheerio from 'cheerio'
 
-export default async function getPoolPageAmenities(poolUrl) {
+export default async function getPoolPageAmenities(poolUrl: string | null) {
+  if (!poolUrl) {
+    throw new Error('No pool URL provided')
+  }
+
   const { body } = await request(poolUrl)
   const html = await body.text()
   const $ = cheerio.load(html)
