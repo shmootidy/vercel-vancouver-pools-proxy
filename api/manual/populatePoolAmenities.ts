@@ -8,7 +8,7 @@ export default async function populatePoolAmenities(req, res) {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
     res.setHeader(
       'Access-Control-Allow-Headers',
-      'Content-Type, Accept, Authorization'
+      'Content-Type, Accept, Authorization',
     )
     res.setHeader('Content-Type', 'application/json')
     return res.status(204).end() // Respond with no content for OPTIONS request
@@ -18,13 +18,17 @@ export default async function populatePoolAmenities(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'Content-Type, Accept, Authorization'
+    'Content-Type, Accept, Authorization',
   )
   res.setHeader('Content-Type', 'application/json')
 
   try {
     // fetch all pools from database
     const { data: pools } = await supabase.from('pools').select()
+
+    if (!pools || !pools.length) {
+      throw new Error('No pools found.')
+    }
 
     // find the amenities
     const poolPageAmenities = await Promise.all(
@@ -33,7 +37,7 @@ export default async function populatePoolAmenities(req, res) {
           id: pool.id,
           amenities: await getPoolPageAmenities(pool.url),
         }
-      })
+      }),
     )
 
     // populate DB
@@ -41,11 +45,11 @@ export default async function populatePoolAmenities(req, res) {
       poolPageAmenities.map(async ({ id, amenities }) => {
         const { data, error } = await supabase
           .from('pools')
-          .update({ amenities })
+          .update({ amenities: amenities.join(',') })
           .eq('id', id)
           .select()
         return { id, data, error }
-      })
+      }),
     )
     const errors = results.filter(({ error }) => error)
     if (errors.length) {

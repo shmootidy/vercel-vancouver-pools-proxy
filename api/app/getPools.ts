@@ -32,7 +32,7 @@ export default async function getPools(req: Request, res: Response) {
       const formattedData = data.map((d) => {
         return {
           ...d,
-          amenities: JSON.parse(d.amenities),
+          amenities: d.amenities ? JSON.parse(d.amenities) : [],
         }
       })
       return res.status(200).json(formattedData)
