@@ -1,14 +1,58 @@
 export interface VancouverPoolSchedules {
   body: {
     center_events: {
-      activity_detail_url: string
-      end_time: string
-      price: {
-        estimate_price: string
-      }
-      start_time: string
-      title: string
-      event_item_id: number
+      center_id: number
+      center_name: string
+      events: {
+        activity_detail_url: string
+        activity_location_desc: string
+        background_color: string | null
+        description: string
+        end_time: string
+        event_item_id: number
+        event_type: number
+        facilities: {
+          center_id: number
+          center_name: string
+          event_type_ids: number[]
+          facility_id: number
+          facility_name: string
+          is_center_valid: boolean
+        }[]
+        instructors: {
+          available_for_online_pre_booked_lessons: boolean
+          avatar: string
+          bio: string
+          can_be_scheduled: boolean
+          email: string
+          first_name: string
+          id: number
+          is_primary_instructor: boolean
+          middle_name: string
+          notes: string
+          phone: string
+          show_instructor_online: boolean
+        }[]
+        online_new_activity: boolean
+        price: {
+          estimate_price: string
+          free: boolean
+          is_package: boolean
+          not_allow_online_team_enroll: boolean
+          prices: any[]
+          private_lesson_enroll_now: string
+          registration_type_prices: any[]
+          search_from_price: string | null
+          search_from_price_desc: string
+          show_price_info_online: boolean
+          simple_fee: boolean
+        }
+        reservation_event_type_id: number
+        start_time: string
+        text_color: string | null
+        title: string
+      }[]
+      total: number
     }[]
   }
 }

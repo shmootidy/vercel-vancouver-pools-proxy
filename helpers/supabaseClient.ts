@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { createClient } from '@supabase/supabase-js'
-import { Database } from '../types/database.types'
+import { Database } from '../types/database.types.js'
 
 if (!process.env.SUPABASE_SECRET_KEY) {
   throw new Error('Missing SUPABASE_SECRET_KEY')
