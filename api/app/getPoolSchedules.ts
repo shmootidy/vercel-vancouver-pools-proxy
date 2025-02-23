@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import fetchPoolSchedules from '../../helpers/fetchPoolSchedules.js'
-import { VancouverPoolSchedules } from '../interfaces/interfaces.js'
+import { VancouverPoolSchedules } from '../../types/interfaces.js'
 
 export default async function getPoolSchedules(req: Request, res: Response) {
   if (req.method === 'OPTIONS') {

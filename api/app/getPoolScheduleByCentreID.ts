@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { fetch } from 'undici'
-import { VancouverPoolSchedules } from '../interfaces/interfaces'
+import { VancouverPoolSchedules } from '../../types/interfaces'
 
 export default async function getPoolScheduleByCentreID(
   req: Request,
