@@ -2,7 +2,7 @@ import { request } from 'undici'
 import * as cheerio from 'cheerio'
 
 // this will need to take args, but right now is hardcoded to Minoru
-export default async function findPoolScheduleRichmondPDF() {
+export default async function findPoolScheduleRichmondPDF(poolName) {
   const richmondURL = 'https://www.richmond.ca'
   const { body } = await request(
     `${richmondURL}/parks-recreation/about/schedules.htm`,
@@ -15,7 +15,12 @@ export default async function findPoolScheduleRichmondPDF() {
     .filter((i, el) => $(el).attr('href').includes('Aquatic'))
     .map((i, el) => $(el).attr('href'))
     .get()
-  const firstPdfURL = `${richmondURL}${pdfLinks[0]}`
 
-  return firstPdfURL
+  const pdfUrlForPool = pdfLinks.find((l) => l.includes(poolName))
+
+  if (!pdfUrlForPool) {
+    throw new Error('PDF link not found.')
+  }
+
+  return `${richmondURL}${pdfUrlForPool}`
 }

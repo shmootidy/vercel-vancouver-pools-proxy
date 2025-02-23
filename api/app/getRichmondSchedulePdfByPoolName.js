@@ -10,6 +10,7 @@ export default async function handler(req, res) {
       'Content-Type, Accept, Authorization',
     )
     res.setHeader('Content-Type', 'application/pdf')
+
     return res.status(204).end()
   }
 
@@ -21,9 +22,17 @@ export default async function handler(req, res) {
   )
   res.setHeader('Content-Type', 'application/pdf')
 
+  const { poolName } = req.query
+
+  if (!poolName) {
+    return res.status(400).json({ error: 'Missing params: poolName' })
+  }
+
   try {
-    const pdfURL = await findPoolScheduleRichmondPDF()
+    const name = poolName === 'Minoru' ? 'MCAL' : 'Watermania'
+    const pdfURL = await findPoolScheduleRichmondPDF(name)
     const { body } = await request(pdfURL)
+
     const pdfBuffer = await body.arrayBuffer()
     res.status(200).send(Buffer.from(pdfBuffer))
   } catch (error) {
