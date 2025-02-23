@@ -1,12 +1,13 @@
+import { Request, Response } from 'express'
 import supabase from '../../helpers/supabaseClient.js'
 
-export default async function getPoolsByID(req, res) {
+export default async function getPoolsByID(req: Request, res: Response) {
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
     res.setHeader(
       'Access-Control-Allow-Headers',
-      'Content-Type, Accept, Authorization'
+      'Content-Type, Accept, Authorization',
     )
     res.setHeader('Content-Type', 'application/json')
     return res.status(204).end() // Respond with no content for OPTIONS request
@@ -16,7 +17,7 @@ export default async function getPoolsByID(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'Content-Type, Accept, Authorization'
+    'Content-Type, Accept, Authorization',
   )
   res.setHeader('Content-Type', 'application/json')
 
@@ -30,7 +31,7 @@ export default async function getPoolsByID(req, res) {
     const { data, error } = await supabase
       .from('pools')
       .select()
-      .in('id', poolIDs)
+      .in('id', [poolIDs])
 
     if (error) {
       throw new Error(`Error fetching pool data: ${error.message}`)
