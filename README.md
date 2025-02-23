@@ -54,7 +54,3 @@ Or I can keep things organized by municipality:
   - Other Pools frontend API requests (to calendars and the database), AND manual jobs
 
 I'll have to explore how the other pools have their schedule endpoints written and the layout of their websites. It might make more sense to keep things organized by municipality, and it might make more sense to have things organized by task. Like... do I want a main.yml file in each repository? :thinky-face:
-
-## Definite To Dos
-
-- Make this Typescript. JavaScript is so loosey goosey, it makes me very uneasy.
