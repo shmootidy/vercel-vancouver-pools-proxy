@@ -13,13 +13,13 @@ export default async function getPoolPageAmenities(poolUrl) {
     .find('ul')
     .first()
     .find('li')
-    .map((i, e) => $(e).text().trim())
+    .map((_, e) => $(e).text().trim())
     .get()
   const listUnderA = amenitiesH2
     .nextAll('ul')
     .first()
     .find('li')
-    .map((i, e) => $(e).text().trim())
+    .map((_, e) => $(e).text().trim())
     .get()
 
   if (listUnderA.length) {

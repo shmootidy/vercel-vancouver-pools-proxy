@@ -1,24 +1,13 @@
+import { Request, Response } from 'express'
 import { fetch } from 'undici'
+import { VancouverPoolSchedules } from '../../types/interfaces.js'
+import { setJsonHeaders } from '../../helpers/setHeaders.js'
 
-export default async function getPoolScheduleByCentreID(req, res) {
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      'Content-Type, Accept, Authorization'
-    )
-    res.setHeader('Content-Type', 'application/json')
-    return res.status(204).end() // Respond with no content for OPTIONS request
-  }
-
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Accept, Authorization'
-  )
-  res.setHeader('Content-Type', 'application/json')
+export default async function getPoolScheduleByCentreID(
+  req: Request,
+  res: Response,
+) {
+  setJsonHeaders(req, res)
 
   const { centreID } = req.query
 
@@ -59,11 +48,11 @@ export default async function getPoolScheduleByCentreID(req, res) {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch data: ${response.status} ${response.statusText}`
+        `Failed to fetch data: ${response.status} ${response.statusText}`,
       )
     }
 
-    const data = await response.json()
+    const data = (await response.json()) as VancouverPoolSchedules
 
     return res.status(200).json(data.body.center_events[0])
   } catch (error) {
