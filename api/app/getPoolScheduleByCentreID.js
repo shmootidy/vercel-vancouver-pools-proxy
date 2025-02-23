@@ -6,7 +6,7 @@ export default async function getPoolScheduleByCentreID(req, res) {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
     res.setHeader(
       'Access-Control-Allow-Headers',
-      'Content-Type, Accept, Authorization'
+      'Content-Type, Accept, Authorization',
     )
     res.setHeader('Content-Type', 'application/json')
     return res.status(204).end() // Respond with no content for OPTIONS request
@@ -16,7 +16,7 @@ export default async function getPoolScheduleByCentreID(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'Content-Type, Accept, Authorization'
+    'Content-Type, Accept, Authorization',
   )
   res.setHeader('Content-Type', 'application/json')
 
@@ -59,7 +59,7 @@ export default async function getPoolScheduleByCentreID(req, res) {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch data: ${response.status} ${response.statusText}`
+        `Failed to fetch data: ${response.status} ${response.statusText}`,
       )
     }
 
