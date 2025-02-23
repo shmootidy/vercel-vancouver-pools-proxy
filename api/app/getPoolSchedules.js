@@ -1,4 +1,5 @@
 import fetchPoolSchedulesVancouver from '../../helpers/fetchPoolSchedulesVancouver.js'
+import fetchPoolSchedulesRichmond from '../../helpers/fetchPoolSchedulesRichmond.js'
 
 export default async function getPoolSchedules(req, res) {
   if (req.method === 'OPTIONS') {
@@ -22,10 +23,13 @@ export default async function getPoolSchedules(req, res) {
 
   try {
     const data = await fetchPoolSchedulesVancouver()
+    const richmondPoolSchedules = await fetchPoolSchedulesRichmond()
 
-    const vancouverCenterEvents = data.body.center_events
-
-    return res.status(200).json(data.body.center_events)
+    return res.status(200).json({
+      Vancouver: data.body.center_events,
+      Richmond: richmondPoolSchedules,
+    })
+    // return res.status(200).json(data.body.center_events)
   } catch (error) {
     throw new Error(`Failed to fetch pool schedules: ${error}`)
   }
