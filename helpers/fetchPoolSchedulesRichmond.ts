@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { request } from 'undici'
 import * as cheerio from 'cheerio'
+import fetchHolidayHoursRichmond from './fetchHolidayHoursRichmond.js'
 
 // i guess i'll have to build this out to get the generic schedule and different alerts?
 export default async function fetchPoolSchedulesRichmond() {
@@ -24,6 +25,8 @@ export default async function fetchPoolSchedulesRichmond() {
 
   const richmondPoolSchedules = await Promise.all(
     Object.keys(richmondPoolUrls).map(async (poolName) => {
+      const holidayEvents = await fetchHolidayHoursRichmond(poolName)
+
       const url: string = richmondPoolUrls[poolName]
       const { body } = await request(url)
       const html = await body.text()
@@ -103,8 +106,6 @@ export default async function fetchPoolSchedulesRichmond() {
             )
             if (end_time && start_time) {
               poolEvents.push({ end_time, start_time, title: eventDescription })
-            } else {
-              console.log('a holiday?', daySection, i)
             }
           } else {
             timeRangesOfDaySection.forEach((timeRange) => {
@@ -138,10 +139,11 @@ export default async function fetchPoolSchedulesRichmond() {
 
       return {
         center_name: poolName,
-        events: poolEvents,
+        events: [...poolEvents, ...holidayEvents],
       }
     }),
   )
+
   return richmondPoolSchedules
 }
 
@@ -161,7 +163,6 @@ const DAYS_INDEX: {
   Fri: 5,
   Sat: 6,
   Sun: 7,
-  Holidays: 8,
 }
 
 function convertTime(eventDay: string, timeString: string): string | null {
@@ -172,7 +173,7 @@ function convertTime(eventDay: string, timeString: string): string | null {
 }
 
 function getDayIndicesOfDaySection(
-  daySection: string, // 'Mon-Fri' | 'Mon-Sat' | 'Sat' | 'Sun' | 'Sun & Holiday',
+  daySection: string, // 'Mon-Fri' | 'Mon-Sat' | 'Sat' | 'Sun' | 'Sun & Holidays',
 ) {
   const daysIndices: number[] = []
   // Mon-Fri or Mon-Sat
@@ -185,7 +186,7 @@ function getDayIndicesOfDaySection(
         daysIndices.push(i)
       }
     }
-    // Sun & Holiday
+    // Sun & Holidays
   } else if (daySection.includes('&')) {
     const daysRange = daySection.split('&')
     daysRange.forEach((d) => {
@@ -209,18 +210,19 @@ function getEventDay(today: DateTime<boolean>, targetDayIdx: number) {
   const todayAsIdx = today.weekday
   let addXDays = 0
   if (targetDayIdx === 8) {
-    // i don't know what to do about holidays
-    return 'Holiday'
+    // ignore; holidays are scraped elsewhere
   } else if (targetDayIdx >= todayAsIdx) {
     addXDays = targetDayIdx - todayAsIdx
   } else {
     addXDays = 7 - todayAsIdx + targetDayIdx
   }
-  // return addXDays
   return today.plus({ days: addXDays }).toFormat('D')
 }
 
-function getStartAndEndTimes(eventDay: string, rawTimeRangeString: string) {
+export function getStartAndEndTimes(
+  eventDay: string,
+  rawTimeRangeString: string,
+) {
   const startAndEndTimes = rawTimeRangeString.split('-')
   const end_time = convertTime(eventDay, startAndEndTimes[1])
 
