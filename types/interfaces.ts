@@ -1,3 +1,16 @@
+// made up for this app, intended to give what's needed to the frontend
+export interface RichmondPoolSchedules {
+  center_events: {
+    center_name: string
+    events: {
+      end_time: string
+      start_time: string
+      title: string
+    }[]
+  }[]
+}
+
+// taken directly from the returned data
 export interface VancouverPoolSchedules {
   body: {
     center_events: {
