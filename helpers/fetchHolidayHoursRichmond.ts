@@ -22,26 +22,37 @@ export default async function fetchHolidayHoursRichmond(poolName: string) {
     .split('\n')
     .filter((t) => t.length > 0)
 
-  const datesAndTimes: string[] = []
-  if (poolAccordionSections.length > 2) {
-    let foundIt = false
-    poolAccordionSections.forEach((s) => {
-      if (foundIt) {
-        datesAndTimes.push(s)
-      }
-      if (s.includes('Aquatics')) {
-        foundIt = true
-      }
-      if (s.includes('Seniors')) {
-        foundIt = false
-        datesAndTimes.pop()
-      }
-    })
-  } else {
-    datesAndTimes.push(...poolAccordionSections)
+  // Minoru will also list Seniors Centre times, which we must filter out
+  const foundSeniorCentreIdx = poolAccordionSections.findIndex((s) =>
+    s.includes('Seniors Centre'),
+  )
+  if (foundSeniorCentreIdx >= 3) {
+    poolAccordionSections.splice(
+      foundSeniorCentreIdx,
+      poolAccordionSections.length - 1,
+    )
   }
+  // filter out any values that aren't dates or times
+  const filteredSections = poolAccordionSections.filter((s) => {
+    return s.split(',').length > 1 || s.split('-').length > 1
+  })
 
-  const datesAndTimeRanges: { [date: string]: string } = {}
+  // check if the times are the same (they should be)
+  const allTimes = filteredSections.filter((s) => {
+    return s.split('-').length > 1
+  })
+  const firstTime = allTimes[0]
+  const areAllTimesEqual = allTimes.every((t) => t === firstTime)
+  // if they AREN'T EQUAL, we have a problem... send a notice: dates may be wrong, check the website
+  // in fact, i need that notice in general for all web scrapers
+  const allDates = filteredSections.filter((s) => {
+    return s.split(',').length > 1
+  })
+
+  const datesAndTimesTogetherAtLast: { [date: string]: string } = {}
+  allDates.forEach((d) => {
+    datesAndTimesTogetherAtLast[d] = firstTime
+  })
 
   const holidayEvents: {
     end_time: string
@@ -49,14 +60,8 @@ export default async function fetchHolidayHoursRichmond(poolName: string) {
     title: string
   }[] = []
 
-  datesAndTimes.forEach((dOrT, i) => {
-    if (!dOrT.includes('-')) {
-      datesAndTimeRanges[dOrT] = datesAndTimes[i + 1]
-    }
-  })
-
-  Object.keys(datesAndTimeRanges).forEach((date) => {
-    const timeRange = datesAndTimeRanges[date]
+  Object.keys(datesAndTimesTogetherAtLast).forEach((date) => {
+    const timeRange = datesAndTimesTogetherAtLast[date]
     const dateFormattedToLocalizedNumericDate = DateTime.fromFormat(
       date,
       'ccc, LLL d',
