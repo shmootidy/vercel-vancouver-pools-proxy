@@ -3,7 +3,10 @@ import fetchPoolSchedules from '../../helpers/fetchPoolSchedules.js'
 import { VancouverPoolSchedules } from '../../types/interfaces.js'
 import { setJsonHeaders } from '../../helpers/setHeaders.js'
 
-export default async function getPoolSchedules(req: Request, res: Response) {
+export default async function getVancouverPoolSchedules(
+  req: Request,
+  res: Response,
+) {
   setJsonHeaders(req, res)
 
   try {
