@@ -2,23 +2,19 @@ import { DateTime } from 'luxon'
 import { request } from 'undici'
 import * as cheerio from 'cheerio'
 import fetchHolidayHoursRichmond from './fetchHolidayHoursRichmond.js'
+import { RichmondPoolScheduleArgs } from '../api/app/getRichmondPoolSchedules.js'
 
-export default async function fetchPoolSchedulesRichmond() {
-  const richmondPoolUrls = {
-    Minoru:
-      'https://www.richmond.ca/parks-recreation/centres/minoru.htm?PageMode=HTML',
-    Watermania:
-      'https://www.richmond.ca/parks-recreation/centres/watermania.htm',
-  }
-
+export default async function fetchPoolSchedulesRichmond(
+  richmondPoolScheduleArgs: RichmondPoolScheduleArgs[],
+) {
   const now = DateTime.now()
 
   const richmondPoolSchedules = await Promise.all(
-    Object.keys(richmondPoolUrls).map(async (poolName) => {
+    richmondPoolScheduleArgs.map(async (arg) => {
+      const poolName = arg.poolName
       const holidayEvents = await fetchHolidayHoursRichmond(poolName)
 
-      const url: string = richmondPoolUrls[poolName]
-      const { body } = await request(url)
+      const { body } = await request(arg.poolUrl)
       const html = await body.text()
       const $ = cheerio.load(html)
 
