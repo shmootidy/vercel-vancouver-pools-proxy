@@ -1,7 +1,6 @@
 import { request } from 'undici'
 import * as cheerio from 'cheerio'
 
-// this will need to take args, but right now is hardcoded to Minoru
 export default async function findPoolScheduleRichmondPDF(poolName: string) {
   const richmondURL = 'https://www.richmond.ca'
   const { body } = await request(
