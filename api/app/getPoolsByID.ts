@@ -13,20 +13,37 @@ export default async function getPoolsByID(req: Request, res: Response) {
 
   try {
     const pool_ids = poolIDs.split(',').map((id) => parseInt(id))
-    const { data, error } = await supabase
+    const { data: poolsData, error: poolsError } = await supabase
       .from('pools')
       .select()
       .in('id', pool_ids)
+    const { data: municipalities, error: municipalitiesError } = await supabase
+      .from('municipalities')
+      .select()
 
-    if (error) {
-      throw new Error(`Error fetching pool data: ${error.message}`)
+    if (poolsError) {
+      throw new Error(`Error fetching pool data: ${poolsError.message}`)
+    }
+    if (municipalitiesError) {
+      throw new Error(
+        `Error fetching pool data: ${municipalitiesError.message}`,
+      )
     }
 
-    if (data && data.length) {
-      const formattedData = data.map((d) => {
+    if (
+      poolsData &&
+      poolsData.length &&
+      municipalities &&
+      municipalities.length
+    ) {
+      const formattedData = poolsData.map((d) => {
+        const matchingMunicipality = municipalities.find(
+          (m) => m.id === d.municipality_id,
+        )?.name
         return {
           ...d,
           amenities: d.amenities ? JSON.parse(d.amenities) : [],
+          municipality: matchingMunicipality || '',
         }
       })
       return res.status(200).json(formattedData)
