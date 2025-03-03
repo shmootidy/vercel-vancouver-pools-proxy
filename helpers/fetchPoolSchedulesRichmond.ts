@@ -105,16 +105,11 @@ export default async function fetchPoolSchedulesRichmond(
                   timeRangeSplitBetweenEventAndTimeRange[0]
                 const actualTimeRange =
                   timeRangeSplitBetweenEventAndTimeRange[1]
-                console.log(
-                  'eventDay, actualTimeRange,',
-                  eventDay,
-                  actualTimeRange,
-                )
+
                 const { start_time, end_time } = getStartAndEndTimes(
                   eventDay,
                   actualTimeRange,
                 )
-                console.log('start_time, end_time', start_time, end_time)
 
                 if (end_time && start_time) {
                   poolEvents.push({
@@ -128,14 +123,12 @@ export default async function fetchPoolSchedulesRichmond(
           }
         })
       })
-      console.log(poolName, poolEvents, holidayEvents)
       return {
         center_name: poolName,
         events: [...poolEvents, ...holidayEvents],
       }
     }),
   )
-  console.log(richmondPoolSchedules)
   return richmondPoolSchedules
 }
 
@@ -158,7 +151,6 @@ const DAYS_INDEX: {
 }
 
 function convertTime(eventDay: string, timeString: string): string | null {
-  console.log('in convertTime:', eventDay, timeString)
   return DateTime.fromFormat(
     `${eventDay} ${timeString.replace(/([apm]{2})$/, ' $1')}`,
     'yyyy-MM-dd t',
