@@ -17,7 +17,11 @@ export default async function handler(req: Request, res: Response) {
     const poolSchedulesWithClosures = await Promise.all(
       poolSchedules.body.center_events
         .filter((pool) => {
-          return pool.events.find((e) => e.title.includes('Pool Closure'))
+          return pool.events.find(
+            (e) =>
+              e.title.includes('Pool Closure') ||
+              e.title.includes('Annual Maintenance'),
+          )
         })
         .map(async (pool) => {
           const closureEvents = pool.events.filter(
@@ -61,7 +65,6 @@ export default async function handler(req: Request, res: Response) {
           }
         }),
     )
-
     const { data, error } = await supabase
       .from('closures')
       .insert(poolSchedulesWithClosures)
