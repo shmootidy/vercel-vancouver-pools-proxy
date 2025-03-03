@@ -20,8 +20,14 @@ export default async function handler(req: Request, res: Response) {
           return pool.events.find((e) => e.title.includes('Pool Closure'))
         })
         .map(async (pool) => {
-          const closureEvents = pool.events.filter((e) =>
-            e.title.includes('Pool Closure'),
+          const closureEvents = pool.events.filter(
+            (e) =>
+              e.title.includes('Pool Closure') ||
+              e.title.includes('Annual Maintenance'),
+          )
+
+          const isClosedForAnnualMaintenance = pool.events.find((e) =>
+            e.title.includes('Annual Maintenance'),
           )
 
           const poolName = stripPoolNameOfAsterisk(pool.center_name)
@@ -37,7 +43,12 @@ export default async function handler(req: Request, res: Response) {
             throw new Error(`Pool URL not found: ${poolName}`)
           }
 
-          const poolPageAlerts = await getPoolPageAlerts(url)
+          let poolPageAlerts = 'unknown'
+          if (!isClosedForAnnualMaintenance) {
+            poolPageAlerts = await getPoolPageAlerts(url)
+          } else {
+            poolPageAlerts = 'annual maintenance'
+          }
 
           const lastClosureEvent = closureEvents[closureEvents.length - 1]
 
