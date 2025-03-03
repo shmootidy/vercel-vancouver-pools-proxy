@@ -8,6 +8,7 @@ export default async function fetchPoolSchedulesRichmond(
   richmondPoolScheduleArgs: RichmondPoolScheduleArgs[],
 ) {
   const now = DateTime.now()
+  console.log('is luxon working?', now.toFormat('D'))
 
   const richmondPoolSchedules = await Promise.all(
     richmondPoolScheduleArgs.map(async (arg) => {
@@ -47,6 +48,8 @@ export default async function fetchPoolSchedulesRichmond(
         .map((t) => t.trim())
         .filter((t) => t.length > 0)
 
+      console.log(daySectionsSplit)
+      console.log(allTextSplit)
       // group text by day section
       const allTextGroupedByDaySection: { [dayRange: string]: string[] } = {}
       let lastDaySection = ''
@@ -76,10 +79,15 @@ export default async function fetchPoolSchedulesRichmond(
       Object.keys(allTextGroupedByDaySection).forEach((daySection) => {
         // get the dayIndices of the day section (eg., Mon-Fri = [1,2,3,4,5])
         const dayIndicesOfDaySection = getDayIndicesOfDaySection(daySection)
+        console.log(
+          'daySection and dayIndicesOfDaySection',
+          daySection,
+          dayIndicesOfDaySection,
+        )
         // get the actual dates of the upcoming schedule
         dayIndicesOfDaySection.forEach((i) => {
           const eventDay = getEventDay(now, i)
-
+          console.log('e, eventDay', i, eventDay)
           // get start and end times of the particular day
           // join the day of the event with its start and end times to create the start_time and end_time of the event
           // and push it to the events array
