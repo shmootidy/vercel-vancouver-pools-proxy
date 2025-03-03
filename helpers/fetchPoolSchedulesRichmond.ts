@@ -7,13 +7,7 @@ import { RichmondPoolScheduleArgs } from '../api/app/getRichmondPoolSchedules.js
 export default async function fetchPoolSchedulesRichmond(
   richmondPoolScheduleArgs: RichmondPoolScheduleArgs[],
 ) {
-  const now = DateTime.now()
-  console.log('is luxon working?', now.toFormat('D')) // print 3/3 in deployment, but 3/2 locally
-  console.log('how about if i use utc??', DateTime.utc().toFormat('D')) // 3/3 in both cases, so wronger
-  console.log(
-    'how about if i use timezone??',
-    DateTime.now().setZone('America/Los Angeles').toFormat('D'),
-  ) // 3/3 in both cases, so wronger
+  const now = DateTime.now().setZone('America/Vancouver')
 
   const richmondPoolSchedules = await Promise.all(
     richmondPoolScheduleArgs.map(async (arg) => {
