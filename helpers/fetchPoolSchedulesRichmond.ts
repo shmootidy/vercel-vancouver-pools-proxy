@@ -46,6 +46,8 @@ export default async function fetchPoolSchedulesRichmond(
         .split('\n')
         .map((t) => t.trim())
         .filter((t) => t.length > 0)
+      console.log(daySectionsSplit)
+      console.log(allTextSplit)
 
       // group text by day section
       const allTextGroupedByDaySection: { [dayRange: string]: string[] } = {}
